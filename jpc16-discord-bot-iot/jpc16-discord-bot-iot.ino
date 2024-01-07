@@ -3,8 +3,8 @@
 #include <WebServer.h>
 
 // ชื่อ Wifi และ Password ที่จะเชื่อมต่อ
-const char* WIFI_STA_NAME = "test_wifi";
-const char* WIFI_STA_PASS = "test_password";
+const char* WIFI_STA_NAME = "CSC2G";
+const char* WIFI_STA_PASS = "mixkohome50";
 
 // IP Address
 char IP_ADDRESS[15];
@@ -13,10 +13,11 @@ char IP_ADDRESS[15];
 // เอาไว้เพื่อปิดไม่ให้แสดงค่า IP เฉย ๆ 
 bool disablePrint = false;
 
-// GPIO 27, 26, 25
+// GPIO 27, 26, 25, 33
 int LED_RED = 27;
 int LED_GREEN = 26;
 int LED_BLUE = 25;
+int BUZZ_SPEAKER = 33;
 
 // GPIO 2
 int LED_WIFI_STATUS = 2;
@@ -51,11 +52,13 @@ void setup() {
   pinMode(LED_RED,OUTPUT);
   pinMode(LED_GREEN,OUTPUT);
   pinMode(LED_BLUE,OUTPUT);
+  pinMode(BUZZ_SPEAKER, OUTPUT);
 
   // ตั้งค่า path ให้กับ server ของเรา
   server.on("/", handleRoot);
   server.on("/on", HTTP_GET, ledOn);
   server.on("/off", ledOff);
+  server.on("/play", playBuzzSpeaker);
   server.begin();
 }
 
@@ -90,6 +93,7 @@ void handleRoot() {
 
 void ledOn() {
   disablePrint = true;
+
   // Get the number of arguments in the request
   int args = server.args();
 
@@ -122,3 +126,35 @@ void ledOff() {
   server.send(200, "text/plain", "The light is off");
 }
 
+void playBuzzSpeaker() {
+  disablePrint = true;
+
+  int frequency;
+  double duration;
+
+  // Get the number of arguments in the request
+  int args = server.args();
+
+  // Loop through each argument and print its name and value
+  for (int i = 0; i < args; i++) {
+    if (server.argName(i) == "hz") {
+       frequency = server.arg(i).toInt();
+    }
+
+    if (server.argName(i) == "duration") {
+      duration = server.arg(i).toDouble();
+    }
+
+    // เล่นเสียงตาม frequency ที่กำหนด
+    tone(BUZZ_SPEAKER, frequency);
+
+    // เล่นเสียงภายในเวลาที่กำหนด
+    delay(duration * 1000);
+    
+    // หยุดเล่น
+    tone(BUZZ_SPEAKER, 0);
+
+  }
+
+  server.send(200, "text/plain", "The speaker is playing!");
+}
