@@ -3,8 +3,8 @@
 #include <WebServer.h>
 
 // ชื่อ Wifi และ Password ที่จะเชื่อมต่อ
-const char* WIFI_STA_NAME = "CSC2G";
-const char* WIFI_STA_PASS = "mixkohome50";
+const char* WIFI_STA_NAME = "test_wifi";
+const char* WIFI_STA_PASS = "test_password";
 
 // IP Address
 char IP_ADDRESS[15];
