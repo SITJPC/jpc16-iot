@@ -23,7 +23,7 @@ WebServer server(80);
 
 void setup() {
   // ตั้งค่าความเร็วระหว่างการส่งข้อมูลระหว่าง Microcontroller กับคอมของเรา
-  Serial.begin(921600);
+  Serial.begin(1000000);
 
   // ตั้งค่า pin ของ LED แสดงสถานะ Wifi เป็นการส่งข้อมูล
   pinMode(LED_WIFI_STATUS, OUTPUT);
